@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+        <title>Graphical Neural Net</title>
+        
+	</head>
+	<body>
+        <div id="canvas"></div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+
+        <script src="js/three.js"></script>
+        <script src="js/stats.min.js"></script>
+        <script src="js/gl-matrix-min.js"></script>
+        <script src="js/simpleModeling.js"></script>
+        <script src="js/main.js"></script>
+        
+        <div id="panel">
+            <div id="tab-container">   
+                <button id="setup-tab" class="tab">Setup</button>
+                <button id="run-tab" class="tab">Run</button>
+                <button id="view-tab" class="tab">View</button>
+            </div>
+
+            <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+            <div class="setup controller">
+                
+                <div id="hiddenlayersizes" class="group">
+                    <p class="group-title">Hidden Layer Sizes</p>
+                    <input name="textbox0" class="group-textbox setup-textbox" id="layersize" type="number" placeholder="size" value="10"/>
+                    <button id="addlayer" class="group-button setup-button">Add</button>
+                    <button id="deletelayer" class="group-button setup-button">Delete</button>
+                    <br>
+                </div>
+    
+                <div class="group">
+                    <p class="group-title">Structure</p>
+                    
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-000" name="radios00" checked>
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Weights and Biases</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-001" name="radios00">
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Only Weights</p>
+                    </div>
+                </div>
+    
+                <div class="group">
+                    <p class="group-title">Processing</p>
+                    
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-010" name="radios01" checked>
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Stochastic</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-011" name="radios01">
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Batch</p>
+                    </div>
+                </div>
+    
+                <div class="group">
+                    <p class="group-title">Set Order</p>
+                    
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-020" name="radios02" checked>
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Index</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-021" name="radios02">
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Random Start</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch setup-switch">
+                            <input class="switch__native-control" type="radio" id="radio-022" name="radios02">
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Shuffled</p>
+                    </div>
+                </div>
+    
+                <div class="group">
+                    <p class="group-title">Learning Rate</p>
+                    <input id="learningrate" name="textbox1" class="group-textbox setup-textbox" type="number" placeholder="rate" value="0.001"/>
+                </div>
+    
+                <div class="button-container">
+                    <button onclick="setupApply()" class="apply-button setup-button-solid">Apply & Reset</button>
+                </div>
+            </div>
+
+            <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+            <div class="run controller">
+
+                <div class="group">
+                    <p class="group-title">Training</p>
+                    
+                    <div class="container">
+                        <input id="training-size" class="group-textbox run-textbox" type="number" value="7000"/>
+                        <p class="switch-text">Sample Size</p>
+                    </div>
+                    <div class="container">
+                        <input id="iteration-count" class="group-textbox run-textbox" type="number" value="1"/>
+                        <p class="switch-text">Iteration Count</p>
+                    </div>
+
+                    <div class="container">
+                        <button onclick="runStart()" class="group-button run-button-solid">Start</button>
+                        <button onclick="runStop()" class="group-button run-button-solid">Stop</button>
+                        <button onclick="runReset()" class="group-button run-button-solid">Reset</button>
+                    </div>
+                    <div class="container">
+                        <div class="training-title">Iterations</div>
+                        <div class="training-title">Miss Avg</div>
+                        <div class="training-title">Cost Avg</div>
+                    </div>
+                    <div class="container">
+                        <div id="training-iteration-result" class="training-result">no info</div>
+                        <div id="training-misses-result" class="training-result">no info</div>
+                        <div id="training-cost-result" class="training-result">no info</div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <p class="group-title">Testing</p>
+                    
+                    <div class="container">
+                        <input id="testing-size" class="group-textbox run-textbox" type="number" value="1000"/>
+                        <p class="switch-text">Sample Size</p>
+                    </div>
+                    <div class="container">
+                        <button onclick="runTest()" class="group-button run-button-solid">Test</button>
+                    </div>
+                    <div class="container">
+                        <div class="training-title">Miss Avg</div>
+                        <div class="training-title">Cost Avg</div>
+                    </div>
+                    <div class="container">
+                        <div id="testing-misses-result" class="training-result">no info</div>
+                        <div id="testing-cost-result" class="training-result">no info</div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <p class="group-title">Sample Response</p>
+                    
+                    <div class="container">
+                        <input id="sample-num" class="group-textbox run-textbox" type="number" value="0"/>
+                        <p class="switch-text">Sample</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch run-switch">
+                            <input class="switch__native-control" type="checkbox" id="response-increment" name="checkboxs2">
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+                        <p class="switch-text">Auto Increment</p>
+                    </div>
+
+                    <div class="container">
+                        <button onclick="runResponse()" class="group-button run-button-solid">Check</button>
+                        <button onclick="runNormReset()" class="group-button run-button-solid">Reset Normalization</button>
+                    </div>
+
+                    <div class="container">
+                        <div class="training-title">Sample</div>
+                        <div class="training-title">Miss</div>
+                        <div class="training-title">Accuracy</div>
+                    </div>
+                    <div class="container">
+                        <div id="response-sample-result" class="training-result">no info</div>
+                        <div id="response-miss-result" class="training-result">no info</div>
+                        <div id="response-accuracy-result" class="training-result">no info</div>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <p class="group-title">Back Propagation</p>
+                    
+                    <div class="switch-container">
+                        <label class="switch run-switch">
+                            <input class="switch__native-control" type="radio" id="radio-100" name="radios10" checked>
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Gradient Descent</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch run-switch">
+                            <input class="switch__native-control" type="radio" id="radio-101" name="radios10">
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Experimental</p>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button onclick="runApply()" class="apply-button run-button-solid">Apply</button>
+                </div>
+            </div>
+
+            <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+            <div class="view controller">
+                <div class="group">
+                    <p class="group-title">Component Visibility</p>
+
+                    <div class="table-header">
+                        <p class="table-title">W</p>
+                        <p class="table-title">X</p>
+                        <p class="table-title">B</p>
+                        <p class="table-title">Y</p>
+                    </div>
+
+                    <div class="switch-container">
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" disabled>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" disabled>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" disabled>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" checked>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+                        <p class="switch-text">Input Layer</p>
+                    </div>
+
+                    <div id="outputlayer" class="switch-container">
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" checked>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" checked>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" checked>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+
+                        <label class="switch view-switch">
+                            <input class="switch__native-control componentvisibility" type="checkbox" name="checkboxs1" checked>
+                            <span class="checkbox__outer-square"></span>
+                            <span class="checkbox__inner-mark"></span>
+                        </label>
+                        <p class="switch-text">Output Layer</p>
+                    </div>
+
+                    <div class="container">
+                        <button id="allcomponents" class="group-button view-button">All</button>
+                        <button id="nocomponents" class="group-button view-button">None</button>
+                    </div>
+
+                </div>
+
+                <div class="group">
+                    <p class="group-title">View Type</p>
+                    
+                    <div class="switch-container">
+                        <label class="switch view-switch">
+                            <input class="switch__native-control" type="radio" id="radio-200" name="radios20" checked>
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Current Values</p>
+                    </div>
+                    <div class="switch-container">
+                        <label class="switch view-switch">
+                            <input class="switch__native-control" type="radio" id="radio-201" name="radios20">
+                            <span class="radio__outer-circle"></span>
+                            <span class="radio__inner-circle"></span>
+                        </label>
+                        <p class="switch-text">Value Adjustment</p>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <p class="group-title">Visual Size Parameters</p>
+
+                    <div class="switch-container">
+                        <input id="multW" class="group-textbox view-textbox" type="number" value="1.00"/>
+                        <p class="switch-text">Weight & Bias Multiplier</p>
+                    </div>
+                    <div class="switch-container">
+                        <input id="cutoffW" class="group-textbox view-textbox" type="number" value="0.75"/>
+                        <p class="switch-text">Weight & Bias Cutoff</p>
+                    </div>
+                    <div class="switch-container">
+                        <input id="multX" class="group-textbox view-textbox" type="number" value="1.00"/>
+                        <p class="switch-text">Node Input (X) Multiplier</p>
+                    </div>
+                    <div class="switch-container">
+                        <input id="multY" class="group-textbox view-textbox" type="number" value="1.00"/>
+                        <p class="switch-text">Node Output (Y) Multiplier</p>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button onclick="viewApply()" class="apply-button view-button-solid">Apply</button>
+                </div>
+
+            </div>
+
+            <!-- //////////////////////////////////////////////////////////////////////////// -->
+
+        </div>
+        
+        <script>
+            /*
+            $("#addlayer").click(function() {
+                $(this).parent().append("<div class='layers'></div>");
+                $(this).parent().children().last().text($("#layersize").val());
+            });
+
+            $("#deletelayer").click(function() {
+                $(this).parent().children().last().remove(".layers");
+            });
+
+            $("#allcomponents").click(function() {
+                $(".componentvisibility").each( function () {
+                    if(!$(this).is(':disabled')){
+                        $(this).prop('checked', true);
+                    }
+                });
+            });
+
+            $("#nocomponents").click(function() {
+                $(".componentvisibility").each( function () {
+                    if(!$(this).is(':disabled')){
+                        $(this).prop('checked', false);
+                    }
+                });
+            });
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            $("#setup-tab").click(function() {
+                $("#run-tab").css("background-color","rgba(76, 175, 80, 0.3)");
+                $(".run").css("display","none");
+                $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
+                $(".view").css("display","none");
+
+                $("#setup-tab").css("background-color","rgba(33, 150, 243, 1)");
+                $(".setup").css("display","block");
+            });
+
+            $("#setup-tab").mouseenter(function(){
+                if($("#setup-tab").css("background-color") == "rgba(33, 150, 243, 0.3)"){
+                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.6)");
+                }
+            });
+
+            $("#setup-tab").mouseleave(function(){
+                if($("#setup-tab").css("background-color") == "rgba(33, 150, 243, 0.6)"){
+                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.3)");
+                }
+            });
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            $("#run-tab").click(function() {
+                $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.3)");
+                $(".setup").css("display","none");
+                $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
+                $(".view").css("display","none");
+
+                $("#run-tab").css("background-color","rgba(76, 175, 80, 1)");
+                $(".run").css("display","block");
+            });
+
+            $("#run-tab").mouseenter(function(){
+                if($("#run-tab").css("background-color") == "rgba(76, 175, 80, 0.3)"){
+                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.6)");
+                }
+                
+            });
+
+            $("#run-tab").mouseleave(function(){
+                if($("#run-tab").css("background-color") == "rgba(76, 175, 80, 0.6)"){
+                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.3)");
+                }
+                
+            });
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+            $("#view-tab").click(function() {
+                $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.3)");
+                $(".setup").css("display","none");
+                $("#run-tab").css("background-color","rgba(76, 175, 80, 0.3)");
+                $(".run").css("display","none");
+
+                $("#view-tab").css("background-color","rgba(244, 67, 54, 1)");
+                $(".view").css("display","block");
+            });
+
+            $("#view-tab").mouseenter(function(){
+                if($("#view-tab").css("background-color") == "rgba(244, 67, 54, 0.3)"){
+                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.6)");
+                }
+            });
+
+            $("#view-tab").mouseleave(function(){
+                if($("#view-tab").css("background-color") == "rgba(244, 67, 54, 0.6)"){
+                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
+                }
+            });
+            */
+            
+        </script>
+	</body>
+</html>

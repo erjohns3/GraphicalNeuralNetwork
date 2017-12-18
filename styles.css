@@ -1,0 +1,577 @@
+body {
+    background-color: rgb(30, 30, 30);
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    font-family: 'Roboto', sans-serif;
+}
+
+#canvas {
+    width: 1146px;
+    height: 100%;
+    position: fixed;
+    left: 0px;
+    overflow: hidden;
+}
+
+#panel {
+    background-color: rgb(30, 30, 30);
+    width: 390px;
+    height: 100%;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    overflow: hidden;
+}
+
+/*********************************************************************/
+
+#tab-container {
+    background-color: rgb(40, 40, 40);
+    box-sizing: border-box;
+    width: 100%;
+    height: 6%;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    overflow: hidden;
+}
+
+.tab {
+    background-color: rgb(40, 40, 40);
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    outline: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#setup-tab {
+    left: 0%;
+    width: 33%;
+    background-color: rgba(33, 150, 243, 0.3);
+}
+
+#run-tab {
+    left: 33%;
+    width: 33%;
+    background-color: rgba(76, 175, 80, 0.3);
+}
+
+#view-tab {
+    left: 66%;
+    width: 34%;
+    background-color: rgba(244, 67, 54, 0.3);
+}
+
+/*********************************************************************/
+
+.controller {
+    background-color: rgb(30, 30, 30);
+    box-sizing: border-box;
+    width: 100%;
+    height: 94%;
+    right: 0px;
+    top: 6%;
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: none;
+}
+
+.group{
+    background-color: rgb(40, 40, 40);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+}
+
+.group-title{
+    text-align: left;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    padding: 10px;
+    margin: 0px;
+    height: 20px;
+}
+
+.container {
+    width: 95%;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    position: relative;
+}
+
+/*********************************************************************/
+
+.group-textbox {
+    background-color: rgb(40, 40, 40);
+    color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    width: 50px;
+    text-align: left;
+    display: inline-block;
+    cursor: text;
+    height: 20px;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 0px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+}
+
+.setup-textbox {
+    border-bottom-color: rgba(33, 150, 243, 0.3);
+    color: rgba(33, 150, 243, 1);
+}
+
+.setup-textbox:hover {
+    border-bottom-color: rgba(33, 150, 243, 0.6);
+}
+
+.setup-textbox:focus {
+    border-bottom-color: rgba(33, 150, 243, 1);
+}
+
+.run-textbox {
+    border-bottom-color: rgba(76, 175, 80, 0.3);
+    color: rgba(76, 175, 80, 1);
+}
+
+.run-textbox:hover {
+    border-bottom-color: rgba(76, 175, 80, 0.6);
+}
+
+.run-textbox:focus {
+    border-bottom-color: rgba(76, 175, 80, 1);
+}
+
+.view-textbox {
+    border-bottom-color: rgba(244, 67, 54, 0.3);
+    color: rgba(244, 67, 54, 1);
+}
+
+.view-textbox:hover {
+    border-bottom-color: rgba(244, 67, 54, 0.6);
+}
+
+.view-textbox:focus {
+    border-bottom-color: rgba(244, 67, 54, 1);
+}
+
+#hiddenlayersizes {
+    min-height: 120px;
+}
+
+/*********************************************************************/
+.group-button {
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    height: 20px;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    box-sizing: content-box;
+    vertical-align: top;
+}
+
+.button-container {
+    text-align: center;
+    height: 40px;
+    padding-top: 20px;
+    padding-bottom: 25px;
+}
+
+.apply-button {
+    background-color: rgba(0,0,0,0);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    height: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    box-sizing: content-box;
+}
+
+/*****************************/
+
+.setup-button {
+    color: rgba(33, 150, 243, 0.6);
+}
+
+.setup-button:hover {
+    background-color: rgba(33, 150, 243, 0.3);
+}
+
+.setup-button:active {
+    background-color: rgba(33, 150, 243, 0.6);
+    color: rgba(33, 150, 243, 1);
+}
+
+.setup-button-solid {
+    background-color: rgba(33, 150, 243, 0.6);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.setup-button-solid:hover {
+    background-color: rgba(33, 150, 243, 0.8);
+}
+
+.setup-button-solid:active {
+    background-color: rgba(33, 150, 243, 1);
+}
+
+/*****************************/
+
+.run-button {
+    color: rgba(76, 175, 80, 0.6);
+}
+
+.run-button:hover {
+    background-color: rgba(76, 175, 80, 0.3);
+}
+
+.run-button:active {
+    background-color: rgba(76, 175, 80, 0.6);
+    color: rgba(76, 175, 80, 1);
+}
+
+.run-button-solid {
+    background-color: rgba(76, 175, 80, 0.6);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.run-button-solid:hover {
+    background-color: rgba(76, 175, 80, 0.8);
+}
+
+.run-button-solid:active {
+    background-color: rgba(76, 175, 80, 1);
+}
+
+/*****************************/
+
+.view-button {
+    color: rgba(244, 67, 54, 0.6);
+}
+
+.view-button:hover {
+    background-color: rgba(244, 67, 54, 0.3);
+}
+
+.view-button:active {
+    background-color: rgba(244, 67, 54, 0.6);
+    color: rgba(244, 67, 54, 1);
+}
+
+.view-button-solid {
+    background-color: rgba(244, 67, 54, 0.6);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.view-button-solid:hover {
+    background-color: rgba(244, 67, 54, 0.8);
+}
+
+.view-button-solid:active {
+    background-color: rgba(244, 67, 54, 1);
+}
+
+/*********************************************************************/
+
+.switch-container {
+    width: 95%;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 0px;
+    display: block;
+    position: relative;
+}
+
+.switch {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.switch__native-control {
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+.switch-text {
+    display: inline-block;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    padding: 10px;
+    padding-left: 5px;
+    margin: 0px;
+    height: 20px;
+    vertical-align: top;
+}
+
+/*********************************************************************/
+
+.radio__outer-circle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0);
+}
+
+.radio__inner-circle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 0px;
+    height: 0px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/*****************************/
+
+.setup-switch .radio__outer-circle {
+    border-color: rgba(33, 150, 243, 0.6);
+}
+
+.setup-switch:hover .radio__outer-circle {
+    border: 2px solid rgba(33, 150, 243, 1);
+}
+
+.setup-switch input:checked ~ .radio__outer-circle {
+    border-color: rgba(33, 150, 243, 1);
+}
+
+.setup-switch input:checked ~ .radio__inner-circle {
+    background-color: rgba(33, 150, 243, 1);
+}
+
+/*****************************/
+
+.run-switch .radio__outer-circle {
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.run-switch:hover .radio__outer-circle {
+    border: 2px solid rgba(76, 175, 80, 1);
+}
+
+.run-switch input:checked ~ .radio__outer-circle {
+    border-color: rgba(76, 175, 80, 1);
+}
+
+.run-switch input:checked ~ .radio__inner-circle {
+    background-color: rgba(76, 175, 80, 1);
+}
+
+/*****************************/
+
+.view-switch .radio__outer-circle {
+    border-color: rgba(244, 67, 54, 0.6);
+}
+
+.view-switch:hover .radio__outer-circle {
+    border: 2px solid rgba(244, 67, 54, 1);
+}
+
+.view-switch input:checked ~ .radio__outer-circle {
+    border-color: rgba(244, 67, 54, 1);
+}
+
+.view-switch input:checked ~ .radio__inner-circle {
+    background-color: rgba(244, 67, 54, 1);
+}
+
+/*********************************************************************/
+
+.checkbox__outer-square {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+    border-radius: 2px;
+    border: 2px solid rgba(0, 0, 0, 0);
+}
+
+.checkbox__inner-mark {
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    top: 14.5px;
+    left: 14px;
+    width: 11px;
+    height: 5.5px;
+    padding: 0px;
+    margin: 0px;
+    transform: rotate(-45deg);
+    border-radius: 0px;
+    border: none;
+    border-left: 2px solid rgb(40, 40, 40);
+    border-bottom: 2px solid rgb(40, 40, 40);
+}
+
+/*****************************/
+
+.run-switch .checkbox__outer-square {
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.run-switch:hover .checkbox__outer-square {
+    border-color: rgba(76, 175, 80, 1);
+}
+
+.run-switch input:checked ~ .checkbox__outer-square {
+    background-color: rgba(76, 175, 80, 1);
+}
+
+/*****************************/
+
+.view-switch .checkbox__outer-square {
+    border-color: rgba(244, 67, 54, 0.6);
+}
+
+.view-switch:hover .checkbox__outer-square {
+    border-color: rgba(244, 67, 54, 1);
+}
+
+.view-switch input:checked ~ .checkbox__outer-square {
+    background-color: rgba(244, 67, 54, 1);
+}
+
+/*****************************/
+
+.switch input:disabled ~ .checkbox__outer-square {
+    border-color: rgba(255, 255, 255, 0.07);
+    cursor: default;
+}
+
+.switch input:disabled ~ .checkbox__inner-mark {
+    cursor: default;
+}
+
+/*********************************************************************/
+
+.table-header {
+    display: block;
+    width: 90%;
+    height: 20px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 0px;
+}
+
+.table-title {
+    display: inline-block;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    width: 40px;
+    height: 20px;
+    padding: 0px;
+    margin: 0px;
+    font-size: 16px;
+}
+
+.layers {
+    background-color: rgb(45, 45, 45);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    width: 40px;
+    height: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+.training-result {
+    background-color: rgb(50, 50, 50);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    width: 80px;
+    height: 20px;
+    text-align: left;
+    display: inline-block;
+}
+
+.training-title{
+    background-color: rgba(0,0,0,0);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    padding: 0px;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    width: 80px;
+    height: 20px;
+    text-align: left;
+    display: inline-block;
+}
+
+/*********************************************************************/
+
+#layersize {
+    width: 40px;
+}
+
+.setup-textbox::placeholder {
+    color: rgba(33, 150, 243, 0.6);
+}
+
+.view-textbox::placeholder {
+    color: rgba(244, 67, 54, 0.6);
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
