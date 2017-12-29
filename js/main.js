@@ -57,6 +57,7 @@ var curveIterate = false;
 
 var iteration = 0;
 var iterationCount = 0;
+var iterationCountTmp = 0;
 var trainingSample = 0;
 var testingSample = 0;
 
@@ -105,11 +106,6 @@ var viewPt = new THREE.Vector3(0, 0, 0);
 
 ////////////////////////////////////////////////////
 
-var trainingInput;
-var trainingTarget;
-var testingInput;
-var testingTarget;
-
 var trainingSet;
 var testingSet;
 
@@ -143,13 +139,13 @@ function init() {
 	stats = new Stats();
 	//canvas.appendChild( stats.dom );
 
-	sampleIndexing.length = 7000;
+	sampleIndexing.length = trainingSize;
 	if(set_order == 0){
 		for(var i=0; i<sampleIndexing.length; i++){
 			sampleIndexing[i] = i;
 		}
 	}else if(set_order == 1){
-		var tmp = Math.floor((Math.random()*7000));
+		var tmp = Math.floor((Math.random()*trainingSize));
 		for(var i=0; i<sampleIndexing.length; i++){
 			sampleIndexing[i] = (i+tmp)%sampleIndexing.length;
 		}
@@ -160,7 +156,7 @@ function init() {
 		var tmp;
 		var rand;
 		for(var i=0; i<sampleIndexing.length; i++){
-			rand = Math.floor((Math.random()*7000-i))+i;
+			rand = Math.floor((Math.random()*trainingSize-i))+i;
 			tmp = sampleIndexing[i];
 			sampleIndexing[i] = sampleIndexing[rand];
 			sampleIndexing[rand] = tmp;
@@ -176,7 +172,7 @@ function init() {
 
 	setupBuffers();
 	setupNetwork();
-	//modifyBuffers();
+	modifyBuffers();
 	renderer.render(scene, camera);
 	tick();
 }
@@ -219,7 +215,7 @@ function setupApply(){
 			sampleIndexing[i] = i;
 		}
 	}else if(set_order == 1){
-		var tmp = Math.floor((Math.random()*7000));
+		var tmp = Math.floor((Math.random()*trainingSize));
 		for(var i=0; i<sampleIndexing.length; i++){
 			sampleIndexing[i] = (i+tmp)%sampleIndexing.length;
 		}
@@ -230,7 +226,7 @@ function setupApply(){
 		var tmp;
 		var rand;
 		for(var i=0; i<sampleIndexing.length; i++){
-			rand = Math.floor((Math.random()*7000-i))+i;
+			rand = Math.floor((Math.random()*trainingSize-i))+i;
 			tmp = sampleIndexing[i];
 			sampleIndexing[i] = sampleIndexing[rand];
 			sampleIndexing[rand] = tmp;
@@ -285,14 +281,22 @@ function setupApply(){
 function runStart(){
 	trainingSize = parseInt(document.getElementById("training-size").value);
 	iterationCount = parseInt(document.getElementById("iteration-count").value);
+	iterationCountTmp = iterationCount;
+	trainingSample = 0;
+	document.getElementById("iteration-count").value = 0;
+	document.getElementById("training-size").value = 0;
 }
 
 function runStop(){
 	iterationCount = 0;
+	trainingSample = 0;
+	document.getElementById("iteration-count").value = iterationCountTmp;
+	document.getElementById("training-size").value = trainingSize;
 }
 
 function runReset(){
 	iterationCount = 0;
+	trainingSample = 0;
 	setupNetwork();
 	modifyBuffers();
 	renderer.render(scene, camera);
@@ -336,9 +340,7 @@ function runResponse(){
 }
 
 function runNormReset(){
-	max_weight = 0;
 	max_weight_change = 0;
-	max_bias = 0;
 	max_bias_change = 0;
 }
 
@@ -372,10 +374,8 @@ function viewApply(){
 
 	if($('#radio-200').is(':checked')){
 		view_type = 0;
-		console.log("view_type = 0");
 	}else if($('#radio-201').is(':checked')){
 		view_type = 1;
-		console.log("view_type = 1");
 	}
 
 	multW = parseFloat(document.getElementById("multW").value) * 0.2;
@@ -428,28 +428,44 @@ function onWindowResize( event ) {
 
 function tick() {
 	if(iterationCount > 0){
-		preIterationReset();
-		for(trainingSample=0; trainingSample<trainingSize; trainingSample++){
-			preSampleReset();
-			runNetwork();
-			postSampleModify();
+		
+		if(trainingSample == 0){
+			preIterationReset();
 		}
-		postIterationModify();
-		iteration++;
-		iterationCount--;
-		modifyBuffers();
-		renderer.render( scene, camera );
-		document.getElementById("training-iteration-result").textContent = iteration.toString();
-		document.getElementById("training-misses-result").textContent = ((trainingMisses * 100 / trainingSize).toFixed(2)).toString()+"%";
-		document.getElementById("training-cost-result").textContent = ((trainingCost / trainingSize).toFixed(4)).toString();
 
-		document.getElementById("testing-misses-result").textContent = "no info";
-		document.getElementById("testing-cost-result").textContent = "no info";
-	
-		document.getElementById("response-sample-result").textContent = "no info";
-		document.getElementById("response-miss-result").textContent = "no info";
-		document.getElementById("response-accuracy-result").textContent = "no info";
-		//console.log('iter: ' + iteration + ', m: ' + trainingMisses + ', c: ' + trainingCost.toFixed(3));
+		for(var i=0; i<250; i++){
+			if(trainingSample < trainingSize){
+				preSampleReset();
+				runNetwork();
+				postSampleModify();
+				trainingSample++;
+			}
+		}
+		document.getElementById("training-size").value = trainingSample;
+
+		if(trainingSample == trainingSize){
+			postIterationModify();
+			iteration++;
+			iterationCount--;
+			trainingSample = 0;
+			modifyBuffers();
+			renderer.render( scene, camera );
+
+			document.getElementById("iteration-count").value = iterationCountTmp - iterationCount;
+
+			document.getElementById("training-iteration-result").textContent = iteration.toString();
+			document.getElementById("training-misses-result").textContent = ((trainingMisses * 100 / trainingSize).toFixed(2)).toString()+"%";
+			document.getElementById("training-cost-result").textContent = ((trainingCost / trainingSize).toFixed(4)).toString();
+
+			document.getElementById("testing-misses-result").textContent = "no info";
+			document.getElementById("testing-cost-result").textContent = "no info";
+		
+			document.getElementById("response-sample-result").textContent = "no info";
+			document.getElementById("response-miss-result").textContent = "no info";
+			document.getElementById("response-accuracy-result").textContent = "no info";
+			//console.log('iter: ' + iteration + ', m: ' + trainingMisses + ', c: ' + trainingCost.toFixed(3));
+		}
+		
 	}else if(camLeft || camRight || camUp || camDown){
 		if(camLeft){
 			camHoroAngle = (camHoroAngle + 0.02) % (2*Math.PI);
@@ -970,44 +986,30 @@ function modifySide(positionArray, index, start, end, offsetA, offsetB){
 function setupNetwork(){
 
 	// get training data from local webserver
-	var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", 'input_data/MNIST/test.txt', false);
-    rawFile.onreadystatechange = function (){
-        if(rawFile.readyState === 4){
-            if(rawFile.status === 200 || rawFile.status == 0){
-				var rawText = rawFile.responseText;
-				console.log(rawText);
-				//trainingInput = [];
-				//trainingInput.length = 
-				console.log(rawText[0].toString('hex'));
-				console.log(rawText[1]);
-				console.log(rawText[2]);
-				console.log(rawText[3]);
-				/*
-				for(var i=0; i<trainingSet.length; i++){
-					trainingSet[i] = trainingSet[i].split(',');
-				}
-				*/
-            }
+	var xhr0 = new XMLHttpRequest();
+	xhr0.open("GET", 'input_data/mushrooms/mushroom-training.txt', false);
+    xhr0.onreadystatechange = function (){
+        if(xhr0.readyState === 4 && (xhr0.status === 200 || xhr0.status == 0)){
+			trainingSet = xhr0.responseText.split('\n');
+			for(var i=0; i<trainingSet.length; i++){
+				trainingSet[i] = trainingSet[i].split(',');
+			}
         }
     }
-	rawFile.send(null);
-	
+	xhr0.send(null);
+
 	// get testing data from local webserver
-	rawFile = new XMLHttpRequest();
-    rawFile.open("GET", 'mushroom-testing.txt', false);
-    rawFile.onreadystatechange = function (){
-        if(rawFile.readyState === 4){
-            if(rawFile.status === 200 || rawFile.status == 0){
-				var rawText = rawFile.responseText;
-				testingSet = rawText.split('\n');
-				for(var i=0; i<testingSet.length; i++){
-					testingSet[i] = testingSet[i].split(',');
-				}
-            }
+	var xhr1 = new XMLHttpRequest();
+    xhr1.open("GET", 'input_data/mushrooms/mushroom-testing.txt', false);
+    xhr1.onreadystatechange = function (){
+        if(xhr1.readyState === 4 && (xhr1.status === 200 || xhr1.status == 0)){
+			testingSet = xhr1.responseText.split('\n');
+			for(var i=0; i<testingSet.length; i++){
+				testingSet[i] = testingSet[i].split(',');
+			}
         }
     }
-	rawFile.send(null);
+	xhr1.send(null);
 	
 	netX.length = layer_sizes.length;
 	netY.length = layer_sizes.length;
@@ -1031,8 +1033,6 @@ function setupNetwork(){
 	max_weight_change = 0.001;
 	max_bias = 0.001;
 	max_bias_change = 0.001;
-
-	randomSample = Math.floor((Math.random()*7000));
 
 	// allocate the two dimensional arrays excluding the first layer
 	for(var i=1; i<layer_sizes.length; i++){
@@ -1183,7 +1183,7 @@ function postSampleModify(){
 function postIterationModify(){
 
 	if(set_order == 1){
-		var tmp = Math.floor((Math.random()*7000));
+		var tmp = Math.floor((Math.random()*trainingSize));
 		for(var i=0; i<sampleIndexing.length; i++){
 			sampleIndexing[i] = (i+tmp)%sampleIndexing.length;
 		}
@@ -1191,7 +1191,7 @@ function postIterationModify(){
 		var tmp;
 		var rand;
 		for(var i=0; i<sampleIndexing.length; i++){
-			rand = Math.floor((Math.random()*7000-i))+i;
+			rand = Math.floor((Math.random()*trainingSize-i))+i;
 			tmp = sampleIndexing[i];
 			sampleIndexing[i] = sampleIndexing[rand];
 			sampleIndexing[rand] = tmp;
@@ -1356,10 +1356,10 @@ function preTestReset(){
 function testNetwork(){
 	
 	for(var i=0; i<layer_sizes[layer_sizes.length-1]; i++){
-		netT[i] = testingSet[testingSample % 1000][i];
+		netT[i] = testingSet[testingSample][i];
 	}
 	for(var i=0; i<layer_sizes[0]; i++){
-		netY[0][i] = testingSet[testingSample % 1000][i+layer_sizes[layer_sizes.length-1]];
+		netY[0][i] = testingSet[testingSample][i+layer_sizes[layer_sizes.length-1]];
 	}
 
 	// netW[layer number][node_start][node_end]
