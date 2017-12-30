@@ -101,8 +101,15 @@ var multY = 4.0;
 var camRad = 550;
 var camHoroAngle = 0;
 var camVertAngle = 0;
+var camHoroAngleStart = 0;
+var camVertAngleStart = 0;
 var up = new THREE.Vector3(0, 1, 0);
 var viewPt = new THREE.Vector3(0, 0, 0);
+
+var mouseMoving = false;
+var mouseDrag = false;
+var mouseStartX = 0;
+var mouseStartY = 0;
 
 ////////////////////////////////////////////////////
 
@@ -118,6 +125,9 @@ function init() {
 	window.addEventListener('keydown', onKeyDown, false);
 	window.addEventListener('keyup', onKeyUp, false);
 	window.addEventListener('resize', onWindowResize, false);
+	window.addEventListener('mousedown', onMouseDown);
+	window.addEventListener('mousemove', onMouseMove);
+	window.addEventListener('mouseup', onMouseUp);
 
 	canvas = document.getElementById('canvas');
     
@@ -419,11 +429,30 @@ function onKeyUp(event){
 	}
 }
 
-function onWindowResize( event ) {
+function onWindowResize(event) {
 	camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
 	renderer.render( scene, camera );
+}
+
+function onMouseDown(event){
+	mouseDrag = true;
+	mouseStartX = event.clientX;
+	mouseStartY = event.clientY;
+	camHoroAngleStart = camHoroAngle;
+	camVertAngleStart = camVertAngle;
+}
+
+function onMouseMove(event){
+	if(mouseDrag){
+		camHoroAngle = camHoroAngleStart + 0.005*(event.clientX - mouseStartX);
+		camVertAngle = camVertAngleStart + 0.005*(event.clientY - mouseStartY);
+	}
+}
+
+function onMouseUp(event){
+	mouseDrag = false;
 }
 
 function tick() {
@@ -479,6 +508,12 @@ function tick() {
 		if(camDown){
 			camVertAngle = Math.max(camVertAngle - 0.02, -0.45*Math.PI);
 		}
+		camera.position.x = camRad*Math.cos(camVertAngle)*Math.cos(camHoroAngle);
+		camera.position.y = camRad*Math.sin(camVertAngle);
+		camera.position.z = camRad*Math.cos(camVertAngle)*Math.sin(camHoroAngle);
+		camera.lookAt(0,0,0);
+		renderer.render( scene, camera );
+	}else if(mouseDrag){
 		camera.position.x = camRad*Math.cos(camVertAngle)*Math.cos(camHoroAngle);
 		camera.position.y = camRad*Math.sin(camVertAngle);
 		camera.position.z = camRad*Math.cos(camVertAngle)*Math.sin(camHoroAngle);

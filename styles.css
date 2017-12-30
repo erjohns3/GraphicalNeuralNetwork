@@ -8,7 +8,7 @@ body {
 }
 
 #canvas {
-    width: 1146px;
+    width: 74%;
     height: 100%;
     position: fixed;
     left: 0px;
@@ -17,12 +17,20 @@ body {
 
 #panel {
     background-color: rgb(30, 30, 30);
-    width: 390px;
+    width: 26%;
     height: 100%;
     position: fixed;
     right: 0px;
     top: 0px;
     overflow: hidden;
+}
+
+#tab-prompt {
+    padding: 20px;
+    padding-top: 300px;
+    font-size: 28px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /*********************************************************************/
