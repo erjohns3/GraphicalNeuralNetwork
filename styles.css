@@ -1,10 +1,15 @@
 body {
-    background-color: rgb(30, 30, 30);
+    background-color: rgb(30, 30, 230);
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
     margin-right: 0px;
     font-family: 'Roboto', sans-serif;
+}
+
+body:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
 }
 
 #canvas {
@@ -13,6 +18,26 @@ body {
     position: fixed;
     left: 0px;
     overflow: hidden;
+    background-color: rgb(30, 230, 30);
+}
+
+#fullscreen-button {
+    font-size: 18px;
+    background-color: rgba(0,0,0,0);
+    color: rgba(255, 255, 255, 0.25);
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+#fullscreen-button:hover {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#fullscreen-button:active {
+    color: rgba(255, 255, 255, 0.75);
 }
 
 #panel {

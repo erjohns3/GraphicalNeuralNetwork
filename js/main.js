@@ -111,6 +111,8 @@ var mouseDrag = false;
 var mouseStartX = 0;
 var mouseStartY = 0;
 
+var fullscreen = false;
+
 ////////////////////////////////////////////////////
 
 var trainingSet;
@@ -429,6 +431,20 @@ function onKeyUp(event){
 	}
 }
 
+function fullscreenButton(){
+	console.log("button pressed");
+	var element = document.getElementById("all");
+	if(!fullscreen){
+		document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+		console.log("fullscreen entered");
+	}else{
+		document.webkitExitFullscreen(); 
+		console.log("fullscreen exited");
+	}
+	fullscreen = !fullscreen;
+	//element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+}
+
 function onWindowResize(event) {
 	camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
 	camera.updateProjectionMatrix();
@@ -448,6 +464,8 @@ function onMouseMove(event){
 	if(mouseDrag){
 		camHoroAngle = camHoroAngleStart + 0.005*(event.clientX - mouseStartX);
 		camVertAngle = camVertAngleStart + 0.005*(event.clientY - mouseStartY);
+		camVertAngle = Math.min(camVertAngle, 0.45*Math.PI);
+		camVertAngle = Math.max(camVertAngle, -0.45*Math.PI);
 	}
 }
 
