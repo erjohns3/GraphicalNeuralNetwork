@@ -432,17 +432,12 @@ function onKeyUp(event){
 }
 
 function fullscreenButton(){
-	console.log("button pressed");
-	var element = document.getElementById("all");
 	if(!fullscreen){
 		document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-		console.log("fullscreen entered");
 	}else{
 		document.webkitExitFullscreen(); 
-		console.log("fullscreen exited");
 	}
 	fullscreen = !fullscreen;
-	//element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
 }
 
 function onWindowResize(event) {
