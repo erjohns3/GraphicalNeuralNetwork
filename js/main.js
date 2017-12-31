@@ -124,20 +124,21 @@ var tubeBufferLength = 0;
 init();
 
 function init() {
-	window.addEventListener('keydown', onKeyDown, false);
-	window.addEventListener('keyup', onKeyUp, false);
+	canvas = document.getElementById('canvas');
+
 	window.addEventListener('resize', onWindowResize, false);
 
-	window.addEventListener('mousedown', onMouseDown);
-	window.addEventListener('mousemove', onMouseMove);
-	window.addEventListener('mouseup', onMouseUp);
+	window.addEventListener('keydown', onKeyDown, false);
+	window.addEventListener('keyup', onKeyUp, false);
 
-	window.addEventListener('touchstart', onTouchStart, false);
-	window.addEventListener('touchmove', onTouchMove, false);
-	window.addEventListener('touchend', onTouchEnd, false);
-	window.addEventListener('touchcancel', onTouchCancel, false);
+	canvas.addEventListener('mousedown', onMouseDown);
+	canvas.addEventListener('mousemove', onMouseMove);
+	canvas.addEventListener('mouseup', onMouseUp);
 
-	canvas = document.getElementById('canvas');
+	canvas.addEventListener('touchstart', onTouchStart, false);
+	canvas.addEventListener('touchmove', onTouchMove, false);
+	canvas.addEventListener('touchend', onTouchEnd, false);
+	canvas.addEventListener('touchcancel', onTouchCancel, false);
     
 	scene = new THREE.Scene();
 
@@ -446,8 +447,7 @@ function fullscreenButton(){
 
 	if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
 		requestFullScreen.call(docEl);
-	}
-	else {
+	}else {
 		cancelFullScreen.call(doc);
 	}
 	/*
