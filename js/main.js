@@ -127,9 +127,15 @@ function init() {
 	window.addEventListener('keydown', onKeyDown, false);
 	window.addEventListener('keyup', onKeyUp, false);
 	window.addEventListener('resize', onWindowResize, false);
+
 	window.addEventListener('mousedown', onMouseDown);
 	window.addEventListener('mousemove', onMouseMove);
 	window.addEventListener('mouseup', onMouseUp);
+
+	window.addEventListener('touchstart', onTouchStart, false);
+	window.addEventListener('touchmove', onTouchMove, false);
+	window.addEventListener('touchend', onTouchEnd, false);
+	window.addEventListener('touchcancel', onTouchCancel, false);
 
 	canvas = document.getElementById('canvas');
     
@@ -432,12 +438,26 @@ function onKeyUp(event){
 }
 
 function fullscreenButton(){
+	var doc = window.document;
+	var docEl = doc.documentElement;
+
+	var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+	var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+	if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+		requestFullScreen.call(docEl);
+	}
+	else {
+		cancelFullScreen.call(doc);
+	}
+	/*
 	if(!fullscreen){
 		document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
 	}else{
 		document.webkitExitFullscreen(); 
 	}
 	fullscreen = !fullscreen;
+	*/
 }
 
 function onWindowResize(event) {
@@ -446,6 +466,8 @@ function onWindowResize(event) {
 	renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
 	renderer.render( scene, camera );
 }
+
+//////////////////////////////////////////////////////////////////////////
 
 function onMouseDown(event){
 	mouseDrag = true;
@@ -457,8 +479,8 @@ function onMouseDown(event){
 
 function onMouseMove(event){
 	if(mouseDrag){
-		camHoroAngle = camHoroAngleStart + 0.005*(event.clientX - mouseStartX);
-		camVertAngle = camVertAngleStart + 0.005*(event.clientY - mouseStartY);
+		camHoroAngle = camHoroAngleStart + 0.006*(event.clientX - mouseStartX);
+		camVertAngle = camVertAngleStart + 0.006*(event.clientY - mouseStartY);
 		camVertAngle = Math.min(camVertAngle, 0.45*Math.PI);
 		camVertAngle = Math.max(camVertAngle, -0.45*Math.PI);
 	}
@@ -467,6 +489,35 @@ function onMouseMove(event){
 function onMouseUp(event){
 	mouseDrag = false;
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+function onTouchStart(event){
+	mouseDrag = true;
+	mouseStartX = event.touches[0].clientX;
+	mouseStartY = event.touches[0].clientY;
+	camHoroAngleStart = camHoroAngle;
+	camVertAngleStart = camVertAngle;
+}
+
+function onTouchMove(event){	
+	if(mouseDrag){
+		camHoroAngle = camHoroAngleStart + 0.006*(event.touches[0].clientX - mouseStartX);
+		camVertAngle = camVertAngleStart + 0.006*(event.touches[0].clientY - mouseStartY);
+		camVertAngle = Math.min(camVertAngle, 0.45*Math.PI);
+		camVertAngle = Math.max(camVertAngle, -0.45*Math.PI);
+	}
+}
+
+function onTouchEnd(event){
+	mouseDrag = false;
+}
+
+function onTouchCancel(event){
+	mouseDrag = false;
+}
+
+//////////////////////////////////////////////////////////////////////////
 
 function tick() {
 	if(iterationCount > 0){
