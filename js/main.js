@@ -38,7 +38,7 @@ var spherePositions = [];
 // setup variables //////////////////////////////////
 var biases = true;
 var processing = 0;
-var back_prop = 0;
+var learning_method = 0;
 var set_order = 0;
 var weight_init = 0;
 var learning_rate = 0.001;
@@ -365,9 +365,9 @@ function runNormReset(){
 
 function runApply(){
 	if($('#radio-100').is(':checked')){
-		back_prop = 0;
+		learning_method = 0;
 	}else if($('#radio-101').is(':checked')){
-		back_prop = 1;
+		learning_method = 1;
 	}
 }
 
@@ -1410,9 +1410,9 @@ function runNetwork(){
 		for(var j=0; j<layer_sizes[i-1]; j++){
 			for(var k=0; k<layer_sizes[i]; k++){
 				var derivative = netD[i][k];
-				if(back_prop == 0){
+				if(learning_method == 0){
 					netWChange[i][j][k] = targetDiff * netY[i-1][j] * derivative * learning_rate;
-				}else if(back_prop == 1){
+				}else if(learning_method == 1){
 					if(derivative >= 0){
 						derivative = Math.max(derivative, 0.05);
 					}else{
@@ -1429,9 +1429,9 @@ function runNetwork(){
 		if(biases){
 			for(var j=0; j<layer_sizes[i]; j++){
 				var derivative = netD[i][j];
-				if(back_prop == 0){
+				if(learning_method == 0){
 					netBChange[i][j] = targetDiff * derivative * learning_rate;
-				}else if(back_prop == 1){
+				}else if(learning_method == 1){
 					if(derivative >= 0){
 						derivative = Math.max(derivative, 0.05);
 					}else{
