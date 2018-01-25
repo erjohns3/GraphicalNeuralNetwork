@@ -90,19 +90,19 @@ body:-webkit-full-screen {
 #setup-tab {
     left: 0%;
     width: 33%;
-    background-color: rgba(33, 150, 243, 0.3);
+    background-color: rgba(33, 150, 243, 0.25);
 }
 
 #run-tab {
     left: 33%;
     width: 33%;
-    background-color: rgba(76, 175, 80, 0.3);
+    background-color: rgba(76, 175, 80, 0.25);
 }
 
 #view-tab {
     left: 66%;
     width: 34%;
-    background-color: rgba(244, 67, 54, 0.3);
+    background-color: rgba(244, 67, 54, 0.25);
 }
 
 /*********************************************************************/

@@ -396,13 +396,13 @@
             ////////////////////////////////////////////////////////////////////////////////////////////
 
             $("#setup-tab").click(function() {
-                $("#run-tab").css("background-color","rgba(76, 175, 80, 0.3)");
+                $("#run-tab").css("background-color","rgba(76, 175, 80, 0.25)");
                 $(".run").css("display","none");
-                $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
+                $("#view-tab").css("background-color","rgba(244, 67, 54, 0.25)");
                 $(".view").css("display","none");
 
-                
                 $("#setup-tab").css("background-color","rgba(33, 150, 243, 1)");
+
                 if($(".setup").css("display") == "none"){
                     $(".setup").css("display","block");
                 }else{
@@ -411,26 +411,31 @@
             });
 
             $("#setup-tab").mouseenter(function(){
-                if($("#setup-tab").css("background-color") == "rgba(33, 150, 243, 0.3)"){
-                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.6)");
+                if($(".setup").css("display") == "none"){
+                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.5)");
+                }else{
+                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 1)");
                 }
             });
 
             $("#setup-tab").mouseleave(function(){
-                if($("#setup-tab").css("background-color") == "rgba(33, 150, 243, 0.6)"){
-                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.3)");
+                if($(".setup").css("display") == "none"){
+                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.25)");
+                }else{
+                    $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.75)");
                 }
             });
 
             ////////////////////////////////////////////////////////////////////////////////////////////
 
             $("#run-tab").click(function() {
-                $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.3)");
+                $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.25)");
                 $(".setup").css("display","none");
-                $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
+                $("#view-tab").css("background-color","rgba(244, 67, 54, 0.25)");
                 $(".view").css("display","none");
 
                 $("#run-tab").css("background-color","rgba(76, 175, 80, 1)");
+
                 if($(".run").css("display") == "none"){
                     $(".run").css("display","block");
                 }else{
@@ -439,28 +444,32 @@
             });
 
             $("#run-tab").mouseenter(function(){
-                if($("#run-tab").css("background-color") == "rgba(76, 175, 80, 0.3)"){
-                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.6)");
+                if($(".run").css("display") == "none"){
+                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.5)");
+                }else{
+                    $("#run-tab").css("background-color","rgba(76, 175, 80, 1)");
                 }
                 
             });
 
             $("#run-tab").mouseleave(function(){
-                if($("#run-tab").css("background-color") == "rgba(76, 175, 80, 0.6)"){
-                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.3)");
+                if($(".run").css("display") == "none"){
+                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.25)");
+                }else{
+                    $("#run-tab").css("background-color","rgba(76, 175, 80, 0.75)");
                 }
-                
             });
 
             ////////////////////////////////////////////////////////////////////////////////////////////
 
             $("#view-tab").click(function() {
-                $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.3)");
+                $("#setup-tab").css("background-color","rgba(33, 150, 243, 0.25)");
                 $(".setup").css("display","none");
-                $("#run-tab").css("background-color","rgba(76, 175, 80, 0.3)");
+                $("#run-tab").css("background-color","rgba(76, 175, 80, 0.25)");
                 $(".run").css("display","none");
 
                 $("#view-tab").css("background-color","rgba(244, 67, 54, 1)");
+
                 if($(".view").css("display") == "none"){
                     $(".view").css("display","block");
                 }else{
@@ -469,14 +478,18 @@
             });
 
             $("#view-tab").mouseenter(function(){
-                if($("#view-tab").css("background-color") == "rgba(244, 67, 54, 0.3)"){
-                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.6)");
+                if($(".view").css("display") == "none"){
+                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.5)");
+                }else{
+                    $("#view-tab").css("background-color","rgba(244, 67, 54, 1)");
                 }
             });
 
             $("#view-tab").mouseleave(function(){
-                if($("#view-tab").css("background-color") == "rgba(244, 67, 54, 0.6)"){
-                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
+                if($(".view").css("display") == "none"){
+                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.25)");
+                }else{
+                    $("#view-tab").css("background-color","rgba(244, 67, 54, 0.75)");
                 }
             });
             
