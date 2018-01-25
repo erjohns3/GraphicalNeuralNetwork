@@ -28,7 +28,12 @@
                 <button id="view-tab" class="tab">View</button>
             </div>
 
-            <div id="tab-prompt">Click on the tabs above to configure the network</div>
+            <div id="helper-prompt">
+                The camera can be controlled with the arrow keys, click and dragging the mouse, or touch and dragging for touch screens<br/>
+                <br/>
+                <br/>
+                Click on the tabs above to configure the network
+            </div>
 
             <!-- //////////////////////////////////////////////////////////////////////////// -->
 
@@ -396,8 +401,13 @@
                 $("#view-tab").css("background-color","rgba(244, 67, 54, 0.3)");
                 $(".view").css("display","none");
 
+                
                 $("#setup-tab").css("background-color","rgba(33, 150, 243, 1)");
-                $(".setup").css("display","block");
+                if($(".setup").css("display") == "none"){
+                    $(".setup").css("display","block");
+                }else{
+                    $(".setup").css("display","none");
+                }
             });
 
             $("#setup-tab").mouseenter(function(){
@@ -421,7 +431,11 @@
                 $(".view").css("display","none");
 
                 $("#run-tab").css("background-color","rgba(76, 175, 80, 1)");
-                $(".run").css("display","block");
+                if($(".run").css("display") == "none"){
+                    $(".run").css("display","block");
+                }else{
+                    $(".run").css("display","none");
+                }
             });
 
             $("#run-tab").mouseenter(function(){
@@ -447,7 +461,11 @@
                 $(".run").css("display","none");
 
                 $("#view-tab").css("background-color","rgba(244, 67, 54, 1)");
-                $(".view").css("display","block");
+                if($(".view").css("display") == "none"){
+                    $(".view").css("display","block");
+                }else{
+                    $(".view").css("display","none");
+                }
             });
 
             $("#view-tab").mouseenter(function(){

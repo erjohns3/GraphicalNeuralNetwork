@@ -47,10 +47,10 @@ body:-webkit-full-screen {
     overflow: hidden;
 }
 
-#tab-prompt {
-    padding: 1.25em;
-    padding-top: 12em;
-    font-size: 1.75em;
+#helper-prompt {
+    padding: 1em;
+    padding-top: 9em;
+    font-size: 1.5em;
     text-align: center;
     color: rgba(255, 255, 255, 0.5);
 }
